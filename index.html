@@ -1,0 +1,49 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script>
+         function getData()
+         {
+             $.get( "https://app101-afhbbqe2a3a0gvgz.uaenorth-01.azurewebsites.net/", function( data ) {
+                 $( "#app" ).html( data );
+                 console.log( "Load was performed." );
+             });
+         }
+         function convert()
+         {
+             let unit = $("#unit").val();
+             let value = $("#value").val();
+             console.log(unit);
+             console.log(value);
+             $.ajax({
+                 type: "POST",
+                 url: "http://localhost:8080",
+                 data: JSON.stringify({unit: unit, value: value}),
+                 success: function(data){
+                     console.log(data);
+                     console.log(data.from_unit);
+                     let result = data.input + ' '+data.from_unit+" is "+data.result+" "+data.to_unit;
+                     console.log(result);
+                     $("#result").html(result);
+                 },
+                 dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+             });
+         }
+     </script>
+
+</head>
+<body>
+<div id="app"></div>
+<form>
+    Unit: <select id="unit">
+    <option value="C">C</option>
+    <option value="F">F</option>
+        </select>
+    <br/>
+    Value: <input id="value" type="text"/><br/>
+    Result: <div id="result"></div>
+</form>
+<button onclick="convert()" >Convert</button>
+</body>
+</html>
